@@ -1,0 +1,6 @@
+{
+  "name": "University of Ghana Student Election System",
+  "description": "Production-quality student election management and voting system for University of Ghana.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
