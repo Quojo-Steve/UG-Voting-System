@@ -23,7 +23,9 @@ export const VoterOTP: React.FC = () => {
   const voterId = sessionStorage.getItem('ug_pending_voter_id') || '';
   const electionId = sessionStorage.getItem('ug_pending_election_id') || '';
   const maskedEmail = sessionStorage.getItem('ug_pending_voter_email') || 'your student email';
-  const debugOtp = sessionStorage.getItem('ug_pending_debug_otp');
+  const [debugOtp, setDebugOtp] = useState<string | null>(() =>
+    sessionStorage.getItem('ug_pending_debug_otp')
+  );
 
   useEffect(() => {
     if (!voterId || !electionId) {
@@ -67,6 +69,10 @@ export const VoterOTP: React.FC = () => {
     setError(null);
     try {
       const response = await voterService.requestOTP(voterId, electionId);
+      if (response.debugOtp) {
+        sessionStorage.setItem('ug_pending_debug_otp', response.debugOtp);
+        setDebugOtp(response.debugOtp);
+      }
       setCountdown(120);
       setOtp('');
       addToast(
@@ -114,6 +120,20 @@ export const VoterOTP: React.FC = () => {
             {error && (
               <div className="p-3 rounded-lg bg-red-950/60 border border-red-500/40 text-red-300 text-xs">
                 {error}
+              </div>
+            )}
+
+            {debugOtp && (
+              <div className="rounded-xl border border-amber-400/60 bg-amber-400/10 p-4 text-center">
+                <p className="text-xs font-semibold uppercase tracking-wider text-amber-300">
+                  Development Test OTP
+                </p>
+                <p className="mt-2 font-mono text-3xl font-black tracking-[0.35em] text-white">
+                  {debugOtp}
+                </p>
+                <p className="mt-2 text-[11px] text-slate-300">
+                  Email sending is not configured, so use this code to continue testing.
+                </p>
               </div>
             )}
 

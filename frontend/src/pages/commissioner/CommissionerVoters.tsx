@@ -77,21 +77,33 @@ export const CommissionerVoters: React.FC = () => {
   };
 
   const handleDownloadSample = () => {
-    const csvContent =
-      'data:text/csv;charset=utf-8,VoterID,Name,Email,Hall,Department\n' +
-      '10982341,Kwame Mensah,kmensah@st.ug.edu.gh,Commonwealth Hall,Computer Science\n' +
-      '10982342,Ama Serwaa,aserwaa@st.ug.edu.gh,Volta Hall,Political Science\n' +
-      '10982343,Kofi Osei,kosei@st.ug.edu.gh,Legon Hall,Business Administration\n' +
-      '10982344,Akosua Darko,adarko@st.ug.edu.gh,Akuafo Hall,Law';
+    const rows = [
+      ['VoterID', 'Name', 'Email', 'Hall', 'Department'],
+      ['10982341', 'Kwame Mensah', 'kmensah@st.ug.edu.gh', 'Commonwealth Hall', 'Computer Science'],
+      ['10982342', 'Ama Serwaa', 'aserwaa@st.ug.edu.gh', 'Volta Hall', 'Political Science'],
+      ['10982343', 'Kofi Osei', 'kosei@st.ug.edu.gh', 'Legon Hall', 'Business Administration'],
+      ['10982344', 'Akosua Darko', 'adarko@st.ug.edu.gh', 'Akuafo Hall', 'Law'],
+    ];
 
-    const encodedUri = encodeURI(csvContent);
+    const tableRows = rows
+      .map(
+        (row) =>
+          `<tr>${row
+            .map((cell) => `<td style="mso-number-format:'\\@';">${cell}</td>`)
+            .join('')}</tr>`
+      )
+      .join('');
+    const excelHtml = `<!doctype html><html><head><meta charset="utf-8" /></head><body><table>${tableRows}</table></body></html>`;
+    const blob = new Blob([excelHtml], { type: 'application/vnd.ms-excel;charset=utf-8;' });
+    const url = URL.createObjectURL(blob);
     const link = document.createElement('a');
-    link.setAttribute('href', encodedUri);
-    link.setAttribute('download', `UG_Voter_Register_Template_${id}.csv`);
+    link.href = url;
+    link.download = `UG_Voter_Register_Template_${id}.xls`;
     document.body.appendChild(link);
     link.click();
     document.body.removeChild(link);
-    addToast('Downloaded official voter register CSV sample template.', 'info');
+    URL.revokeObjectURL(url);
+    addToast('Downloaded Excel voter register sample template.', 'info');
   };
 
   if (loading) return <LoadingState message="Loading voter registry..." />;
@@ -175,7 +187,7 @@ export const CommissionerVoters: React.FC = () => {
             onClick={handleDownloadSample}
             leftIcon={<Download className="w-4 h-4" />}
           >
-            Download CSV Template
+            Download Excel Sample
           </Button>
         }
       />
@@ -213,7 +225,7 @@ export const CommissionerVoters: React.FC = () => {
             onFileSelect={(f) => setSelectedFile(f)}
             onClearFile={() => setSelectedFile(null)}
             title="Drag and drop official student register file here"
-            description="Columns required: VoterID, Name, Email (and optional Hall, Department)"
+            description="Columns required: VoterID, Name, Email (optional: Hall, Department). Use the Excel sample above if unsure."
           />
 
           {selectedFile && (
