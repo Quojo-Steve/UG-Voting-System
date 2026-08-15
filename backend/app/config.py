@@ -14,7 +14,7 @@ class Settings(BaseSettings):
     jwt_expire_minutes: int = 60 * 12
     otp_expire_minutes: int = 5
     voting_session_expire_minutes: int = 30
-    cors_origins: str = 'http://localhost:3000,http://127.0.0.1:3000'
+    cors_origins: str = 'http://localhost:3000,http://127.0.0.1:3000,https://ug-voting-system.vercel.app/'
 
     smtp_host: str = ''
     smtp_port: int = 587
