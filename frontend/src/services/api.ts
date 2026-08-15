@@ -1,7 +1,7 @@
 import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 
 export const API_BASE_URL =
-  ((import.meta as any).env?.VITE_API_BASE_URL as string) || 'http://localhost:8000/api';
+  ((import.meta as any).env?.VITE_API_BASE_URL as string) || 'https://ug-voting-system-16h5.vercel.app/api';
 
 export const apiClient: AxiosInstance = axios.create({
   baseURL: API_BASE_URL,
