@@ -18,21 +18,28 @@ export const Card: React.FC<CardProps> = ({
   className = '',
   ...props
 }) => {
+  const isDark = /bg-slate-(7|8|9)\d\d|bg-gray-(7|8|9)\d\d|text-white/.test(className);
+  const headerClass = isDark
+    ? 'border-slate-800 bg-slate-800/70'
+    : 'border-slate-100 bg-slate-50/50';
+  const titleClass = isDark ? 'text-white' : 'text-slate-900';
+  const subtitleClass = isDark ? 'text-slate-300' : 'text-slate-500';
+
   return (
     <div
       className={`bg-white rounded-xl border border-slate-200 shadow-xs overflow-hidden ${className}`}
       {...props}
     >
       {(title || action) && (
-        <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100 bg-slate-50/50">
+        <div className={`flex items-center justify-between px-6 py-4 border-b ${headerClass}`}>
           <div>
             {typeof title === 'string' ? (
-              <h3 className="text-base font-semibold text-slate-900">{title}</h3>
+              <h3 className={`text-base font-semibold ${titleClass}`}>{title}</h3>
             ) : (
               title
             )}
             {subtitle && (
-              <div className="mt-0.5 text-xs text-slate-500 font-normal">{subtitle}</div>
+              <div className={`mt-0.5 text-xs ${subtitleClass} font-normal`}>{subtitle}</div>
             )}
           </div>
           {action && <div className="shrink-0 ml-4">{action}</div>}

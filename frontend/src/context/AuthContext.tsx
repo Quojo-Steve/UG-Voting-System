@@ -14,12 +14,18 @@ interface AuthContextType {
     email: string;
     studentId: string;
     password: string;
+    hallOfResidence?: string;
+    department?: string;
+    level?: string;
   }) => Promise<void>;
   logout: () => void;
 
   // Voter Temporary Session
   voterSession: VoterSession | null;
   setVoterSession: (session: VoterSession | null) => void;
+  startVoterSession: (session: VoterSession) => void;
+  endVoterSession: () => void;
+  checkVoterSession: () => boolean;
   voterBallotSelection: BallotSelection;
   setVoterBallotSelection: React.Dispatch<React.SetStateAction<BallotSelection>>;
   clearVoterSession: () => void;
@@ -116,6 +122,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     email: string;
     studentId: string;
     password: string;
+    hallOfResidence?: string;
+    department?: string;
+    level?: string;
   }) => {
     setIsLoading(true);
     try {
@@ -134,8 +143,19 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     localStorage.removeItem(TOKEN_STORAGE_KEY);
   };
 
+  const startVoterSession = (session: VoterSession) => setVoterSession(session);
+  const endVoterSession = () => clearVoterSession();
+  const checkVoterSession = () => {
+    if (!voterSession) return false;
+    if (voterSession.expiresAt && new Date(voterSession.expiresAt).getTime() <= Date.now()) {
+      clearVoterSession();
+      return false;
+    }
+    return true;
+  };
+
   const role = voterSession ? 'VOTER' : user?.role || null;
-  const isAuthenticated = !!user;
+  const isAuthenticated = !!user || !!voterSession;
 
   return (
     <AuthContext.Provider
@@ -150,6 +170,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         logout,
         voterSession,
         setVoterSession,
+        startVoterSession,
+        endVoterSession,
+        checkVoterSession,
         voterBallotSelection,
         setVoterBallotSelection,
         clearVoterSession,

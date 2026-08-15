@@ -64,6 +64,11 @@ export const VoterIdEntry: React.FC = () => {
       sessionStorage.setItem('ug_pending_voter_id', studentId.trim());
       sessionStorage.setItem('ug_pending_election_id', selectedElectionId);
       sessionStorage.setItem('ug_pending_voter_email', response.maskedEmail || 'student email');
+      if (response.debugOtp) {
+        sessionStorage.setItem('ug_pending_debug_otp', response.debugOtp);
+      } else {
+        sessionStorage.removeItem('ug_pending_debug_otp');
+      }
 
       addToast(
         response.message || `Verification OTP sent to ${response.maskedEmail}`,

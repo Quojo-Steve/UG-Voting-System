@@ -126,7 +126,7 @@ export const LandingPage: React.FC = () => {
               <Button
                 variant="secondary"
                 size="md"
-                className="w-full justify-between"
+                className="w-full justify-between cursor-pointer"
                 rightIcon={<ArrowRight className="w-4 h-4" />}
               >
                 Vote
@@ -150,7 +150,7 @@ export const LandingPage: React.FC = () => {
               <Button
                 variant="outline"
                 size="md"
-                className="w-full justify-between bg-slate-800 text-white border-slate-700 hover:bg-slate-700"
+                className="w-full justify-between bg-slate-800 text-white border-slate-700 hover:bg-slate-700 cursor-pointer"
                 rightIcon={<ArrowRight className="w-4 h-4" />}
               >
                 Candidate Portal
@@ -174,7 +174,7 @@ export const LandingPage: React.FC = () => {
               <Button
                 variant="outline"
                 size="md"
-                className="w-full justify-between bg-slate-800 text-white border-slate-700 hover:bg-slate-700"
+                className="w-full justify-between bg-slate-800 text-white border-slate-700 hover:bg-slate-700 cursor-pointer"
                 rightIcon={<ArrowRight className="w-4 h-4" />}
               >
                 Commissioner Portal

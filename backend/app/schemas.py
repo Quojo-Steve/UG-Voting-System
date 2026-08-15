@@ -159,6 +159,7 @@ class RequestOtpResponse(BaseModel):
     electionId: str
     electionName: str
     voterName: str
+    debugOtp: str | None = None
     message: str | None = None
 
 

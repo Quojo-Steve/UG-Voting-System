@@ -45,8 +45,14 @@ export async function withMockFallback<T>(
   try {
     const res = await apiCall();
     return res.data;
-  } catch {
-    // Artificial slight network delay for realistic UX loading states in prototype
+  } catch (error: any) {
+    // Only use prototype mock data when the backend is unreachable. If the
+    // backend returned an HTTP error, surface that real integration error.
+    if (error?.response) {
+      const detail = error.response.data?.detail || error.response.data?.message;
+      throw new Error(typeof detail === 'string' ? detail : error.message || 'Request failed');
+    }
+
     if (delayMs > 0) {
       await new Promise((resolve) => setTimeout(resolve, delayMs));
     }

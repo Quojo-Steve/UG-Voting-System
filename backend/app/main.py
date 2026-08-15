@@ -384,7 +384,8 @@ def request_otp(req: RequestOtp, db: Session = Depends(get_db)):
     code = generate_otp()
     db.add(OTPChallenge(id=generate_id('otp'), election_id=e.id, voter_db_id=v.id, otp_hash=hash_secret(code), expires_at=datetime.utcnow()+timedelta(minutes=settings.otp_expire_minutes)))
     db.commit(); send_otp_email(v.email, code)
-    return RequestOtpResponse(success=True, maskedEmail=mask_email(v.email), electionId=e.id, electionName=e.name, voterName=v.name, message=f'Verification OTP sent to {mask_email(v.email)}')
+    debug_otp = code if not settings.smtp_enabled else None
+    return RequestOtpResponse(success=True, maskedEmail=mask_email(v.email), electionId=e.id, electionName=e.name, voterName=v.name, debugOtp=debug_otp, message=f'Verification OTP sent to {mask_email(v.email)}')
 
 
 @app.post('/api/voter/verify-otp', response_model=VoterSessionResponse)

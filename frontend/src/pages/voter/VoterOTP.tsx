@@ -23,6 +23,7 @@ export const VoterOTP: React.FC = () => {
   const voterId = sessionStorage.getItem('ug_pending_voter_id') || '';
   const electionId = sessionStorage.getItem('ug_pending_election_id') || '';
   const maskedEmail = sessionStorage.getItem('ug_pending_voter_email') || 'your student email';
+  const debugOtp = sessionStorage.getItem('ug_pending_debug_otp');
 
   useEffect(() => {
     if (!voterId || !electionId) {
@@ -167,8 +168,14 @@ export const VoterOTP: React.FC = () => {
 
           <div className="mt-6 pt-4 border-t border-slate-800 text-center">
             <p className="text-[11px] text-slate-400">
-              Demo OTP Hint: Use <span className="font-mono text-amber-300 font-bold">482910</span>{' '}
-              to verify.
+              {debugOtp ? (
+                <>
+                  Development OTP Hint: Use{' '}
+                  <span className="font-mono text-amber-300 font-bold">{debugOtp}</span> to verify.
+                </>
+              ) : (
+                'Check your registered UG email for the OTP.'
+              )}
             </p>
           </div>
         </Card>
